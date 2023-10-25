@@ -6,8 +6,8 @@ const Food = (props) => {
     const [positionY,setPositionY] = useState(0);
 
     const style = {
-        width: "12px",
-        height: "12px",
+        width:  `${props.size}px`,
+        height: `${props.size}px`,
         position: "absolute",
         left: `${positionX}px`,
         top: `${positionY}px`,
@@ -15,7 +15,6 @@ const Food = (props) => {
     }
 
     useEffect(()=>{
-        console.log("position x aggiornata ", props.positionX)
         setPositionX(props.positionX);
         setPositionY(props.positionY);
     },[props.positionX,props.positionY])
