@@ -17,11 +17,12 @@
                 const [squareSize,setSquareSize] = useState(24);
                 const [foodSize,setFoodSize] = useState(12);
                 const [isCollidedWidhFood,setIsCollidedWidthFood] = useState(false);
+                const [countFood, setCountFood] = useState(0);
 
                 console.log("posizione Square x ", positionSquareX  , " position square y " , positionSquareY);
                 console.log("posizione di food x ", positionFoodX, " position food y ", positionFoodY)
 
-                //quando collido con il food , il food deve cambiare posizione
+                
                 //quando collido con il food, lo snake deve crescere 
 
                 const squareIsCollidedWithFood = () => {
@@ -69,6 +70,7 @@
                 useEffect(()=>{
                     if(isCollidedWidhFood) {
                         genenerateRandomPositionFood(0,400);
+                        setCountFood(prev=>prev+1);
                         setIsCollidedWidthFood(false);
                     }
                 },[isCollidedWidhFood]);
@@ -113,9 +115,10 @@
                         <div tabIndex={0} className="container-game">
                             <Square positionX={positionSquareX} positionY={positionSquareY} size={squareSize} />
                             <Food positionX={positionFoodX} positionY={positionFoodY} size={foodSize}/>
-                            
                         </div>
-                        <button onClick={(A) => setKeyRight(true)} >start</button>
+                        <div>
+                            <p>food: {countFood}</p>
+                        </div>
                     </>
 
                 )
