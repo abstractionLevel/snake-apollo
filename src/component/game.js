@@ -13,21 +13,24 @@
                 const [keyDown, setKeyDown] = useState(false);
                 const [keyLeft, setKeyLeft] = useState(false);
                 const [keyRight, setKeyRight] = useState(false);
-                const [hasEaten,setHasEaten] = useState(false);
                 const [stopMove,setStopMove] = useState(false);
                 const [squareSize,setSquareSize] = useState(24);
                 const [foodSize,setFoodSize] = useState(12);
-
+                const [isCollidedWidhFood,setIsCollidedWidthFood] = useState(false);
 
                 console.log("posizione Square x ", positionSquareX  , " position square y " , positionSquareY);
                 console.log("posizione di food x ", positionFoodX, " position food y ", positionFoodY)
+
+                //quando collido con il food , il food deve cambiare posizione
+                //quando collido con il food, lo snake deve crescere 
 
                 const squareIsCollidedWithFood = () => {
                     if(positionSquareX + squareSize > positionFoodX &&
                         positionSquareX  < positionFoodX + foodSize &&
                         positionSquareY < positionFoodY + foodSize &&
                         positionSquareY + squareSize > positionFoodY) {
-                            setStopMove(true);
+                            setIsCollidedWidthFood(true)
+                            console.log("COLLISIONE")
                         }
                 }
 
@@ -52,18 +55,23 @@
                     return Math.floor(Math.random() * (max - min + 1) + min);
                 }
 
-                const genenerateRandomValue = (min,max) => {
-                    let value = getRandomNumber(min,max);
-                    while (value===positionSquareX) {
-                        value = getRandomNumber(min,max)
+                const genenerateRandomPositionFood = (min,max) => {
+                    let x = getRandomNumber(min,max);
+                    let y = getRandomNumber(min,max);
+                    while (x===positionSquareX && y === positionSquareY)  {
+                        x = getRandomNumber(min,max);
+                        y = getRandomNumber(min,max);
                     }
-                    return value;
+                    setPositionFoodX(x);
+                    setPositionFoodY(y);
                 }
 
                 useEffect(()=>{
-                    // setPositionFoodX(genenerateRandomValue(0,50));
-                    // setPositionFoodY(0);
-                },[])
+                    if(isCollidedWidhFood) {
+                        genenerateRandomPositionFood(0,400);
+                        setIsCollidedWidthFood(false);
+                    }
+                },[isCollidedWidhFood]);
 
                 useEffect(() => {
 
@@ -82,7 +90,7 @@
 
                         }
 
-                    }, 500)
+                    }, 500);
 
                     window.addEventListener('keydown', handleKeyDown);
 
@@ -94,7 +102,11 @@
 
                 useEffect(()=>{
                     squareIsCollidedWithFood();
-                },[positionFoodX,positionFoodY,positionSquareX,positionSquareY])
+                },[positionFoodX,positionFoodY,positionSquareX,positionSquareY]);
+
+                useEffect(()=>{
+                    genenerateRandomPositionFood(0,400);
+                },[]);
 
                 return (
                     <>
