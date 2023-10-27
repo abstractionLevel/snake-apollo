@@ -30,7 +30,7 @@ const Game = () => {
                     el.y + squareSize > positionFoodY) {
                     setIsCollidedWidthFood(true)
                     setCountFood(prev => prev + 1);
-                    // addSquare();
+                    addSquare();
                 }
             }
         })
@@ -48,13 +48,12 @@ const Game = () => {
     }
 
     const addSquare = () => {
+        const lastSquare = squareList[squareList.length - 1];
+       console.log("ultimo square ", lastSquare.x)
         setSquareList(prev => {
-            let newSquare = {}
-            if (keyDown) {
-                newSquare = { x: positionSquareX, y: positionSquareY - 20, playable: false }
-            }
-            return [...prev, newSquare];
+            return [...prev,{x:lastSquare.x,y:lastSquare.y,playable:false}]
         });
+      
     }
     const handleKeyDown = (event) => {
         const directionMapping = {
@@ -152,7 +151,6 @@ const Game = () => {
 
     useEffect(() => {
         squareIsCollidedWithFood();
-        console.log("aggiornamento posizione")
     }, [positionFoodX, positionFoodY, squareList]);
 
     useEffect(() => {
