@@ -16,45 +16,9 @@ const Game = () => {
     const [stopMove, setStopMove] = useState(false);
     const [squareSize, setSquareSize] = useState(24);
     const [foodSize, setFoodSize] = useState(12);
-    const [isCollidedWidhFood, setIsCollidedWidthFood] = useState(false);
     const [countFood, setCountFood] = useState(0);
-    const [squareList, setSquareList] = useState([{ x: 20, y: 20, playable: true }]);
+    const [squareList, setSquareList] = useState([{ x: 20, y: 20, playable: true, color: "red" }]);
 
-    const squareIsCollidedWithFood = () => {
-        
-        squareList.forEach(el=>{
-            if(el.playable) {
-                if (el.x + squareSize > positionFoodX &&
-                    el.x < positionFoodX + foodSize &&
-                    el.y < positionFoodY + foodSize &&
-                    el.y + squareSize > positionFoodY) {
-                    setIsCollidedWidthFood(true)
-                    setCountFood(prev => prev + 1);
-                    addSquare();
-                }
-            }
-        })
-       
-    }
-
-    const updatePositionBodySquare = (x, y) => {
-        console.log(squareList.length)
-
-        if (squareList.length > 0) {
-            const newList = squareList.map(val => {
-                return { ...val, x: val.x + x, y: val.y + y }
-            })
-        }
-    }
-
-    const addSquare = () => {
-        const lastSquare = squareList[squareList.length - 1];
-       console.log("ultimo square ", lastSquare.x)
-        setSquareList(prev => {
-            return [...prev,{x:lastSquare.x,y:lastSquare.y,playable:false}]
-        });
-      
-    }
     const handleKeyDown = (event) => {
         const directionMapping = {
             ArrowUp: 'up',
@@ -63,7 +27,6 @@ const Game = () => {
             ArrowRight: 'right'
         }
         const direction = directionMapping[event.key];
-
         if (direction) {
             setKeyUp(direction === 'up');
             setKeyDown(direction === 'down');
@@ -88,55 +51,94 @@ const Game = () => {
     }
 
     useEffect(() => {
-        if (isCollidedWidhFood) {
-            genenerateRandomPositionFood(110, 200);
-            setIsCollidedWidthFood(false);
-
-        }
-    }, [isCollidedWidhFood]);
-
-    useEffect(() => {
-
         if (stopMove) {
             return () => clearInterval(intervalId && intervalId);
         }
         const intervalId = setInterval(() => {
-            if (keyDown) {
-                setSquareList(prevElementi => {
-                    return prevElementi.map(el => {
-                        if(el.playable) {
-                            return  el.y < 666 ? { ...el, y: el.y + 10 } : { ...el, y: el.y };
-                        }
-                        
-                    });
-                });
-            } else if (keyLeft) {
-                setSquareList(prevElementi => {
-                    return prevElementi.map(el => {
-                        if(el.playable) {
-                            return el.x  > 0 ? { ...el, x: el.x - 10 } : { ...el, x: el.x };
-                        }
-                        
-                    });
-                });
-            } else if (keyUp) {
-                setSquareList(prevElementi => {
-                    return prevElementi.map(el => {
-                        if(el.playable) {
-                            return el.y  > 0 ? { ...el, y: el.y - 10 } : { ...el, y: el.y };
-                        }
-                        
-                    });
-                });
-            } else if (keyRight) {
-                setSquareList(prevElementi => {
-                    return prevElementi.map(el => {
-                        if(el.playable) {
-                            return el.x < 466 ? { ...el, x: el.x + 10 } : { ...el, x: el.x };
-                        }
-                        
-                    });
-                });
+            const squareListCpy = [...squareList];
+            let squareIsCollidedWithFood = false;
+            let lastPositionPlayble = {};
+            for (let i = 0; i < squareListCpy.length; i++) {
+                const square = squareListCpy[i];
+                if (square.x + squareSize > positionFoodX && square.x < positionFoodX + foodSize && square.y < positionFoodY + foodSize && square.y + squareSize > positionFoodY) {
+                    squareIsCollidedWithFood = true;
+                    genenerateRandomPositionFood(0, 400);
+                }
+                if (keyDown) {
+                    if (square.playable && !squareIsCollidedWithFood) {
+                        lastPositionPlayble.x = square.x;
+                        lastPositionPlayble.y = square.y;
+                        square.y = square.y + squareSize
+                        setSquareList(squareListCpy);
+                    }  else if (squareIsCollidedWithFood) {
+                        const playbleSquare = squareListCpy.filter(val => val.playable);
+                        const newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y + squareSize, playable: true, color: playbleSquare[0].color };
+                        const newSquareList = squareListCpy.map(item => ({
+                            ...item,
+                            playable: false,
+                            color: "blue"
+                        }));
+                        setSquareList([newSquare, ...newSquareList]);
+                    }
+                } else if (keyLeft) {
+                    if (square.playable && !squareIsCollidedWithFood) {
+                        lastPositionPlayble.x = square.x;
+                        lastPositionPlayble.y = square.y;
+                        square.x = square.x - squareSize
+                        setSquareList(squareListCpy);
+
+                    } else if (squareIsCollidedWithFood) {
+                        const playbleSquare = squareListCpy.filter(val => val.playable);
+                        const newSquare = { x: playbleSquare[0].x - squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
+                        const newSquareList = squareListCpy.map(item => ({
+                            ...item,
+                            playable: false,
+                            color: "blue"
+                        }));
+                        setSquareList([newSquare, ...newSquareList]);
+                    }
+                } else if (keyUp) {
+                    if (square.playable && !squareIsCollidedWithFood) {
+                        lastPositionPlayble.y = square.y;
+                        lastPositionPlayble.x = square.x;
+                        square.y = square.y - squareSize
+                        setSquareList(squareListCpy);
+                    } else if (squareIsCollidedWithFood) {
+                        const playbleSquare = squareListCpy.filter(val => val.playable);
+                        const newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y - squareSize, playable: true, color: playbleSquare[0].color };
+                        const newSquareList = squareListCpy.map(item => ({
+                            ...item,
+                            playable: false,
+                            color: "blue"
+                        }));
+                        setSquareList([newSquare, ...newSquareList]);
+                    }
+                } else if (keyRight) {
+                    if (square.playable && !squareIsCollidedWithFood) {
+                        lastPositionPlayble.x = square.x;
+                        lastPositionPlayble.y = square.y;
+                        square.x = square.x + squareSize
+                        setSquareList(squareListCpy);
+
+                    } else if (squareIsCollidedWithFood) {
+                        const playbleSquare = squareListCpy.filter(val => val.playable);
+                        const newSquare = { x: playbleSquare[0].x + squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
+                        const newSquareList = squareListCpy.map(item => ({
+                            ...item,
+                            playable: false,
+                            color: "blue"
+                        }));
+                        setSquareList([newSquare, ...newSquareList]);
+                    }
+                }
+                if (!square.playable && !squareIsCollidedWithFood) {
+                    let posX = square.x;
+                    let posY = square.y;
+                    square.x = lastPositionPlayble.x;
+                    square.y = lastPositionPlayble.y;
+                    lastPositionPlayble.x = posX;
+                    lastPositionPlayble.y = posY;
+                }
             }
 
         }, 500);
@@ -147,11 +149,7 @@ const Game = () => {
             clearInterval(intervalId);
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [keyLeft, keyDown, keyRight, keyUp, setPositionSquareX, setPositionSquareY, stopMove])
-
-    useEffect(() => {
-        squareIsCollidedWithFood();
-    }, [positionFoodX, positionFoodY, squareList]);
+    }, [keyLeft, keyDown, keyRight, keyUp, , squareList, stopMove])
 
     useEffect(() => {
         genenerateRandomPositionFood(0, 400);
@@ -161,9 +159,9 @@ const Game = () => {
         <>
             <div tabIndex={0} className="container-game">
                 <Food positionX={positionFoodX} positionY={positionFoodY} size={foodSize} />
-                {squareList &&
+                {(squareList && squareList.length > 0) &&
                     squareList.map(val => (
-                        <Square positionX={val.x} positionY={val.y} size={squareSize} />
+                        <Square positionX={val.x} positionY={val.y} size={squareSize} color={val.color} />
 
                     )
                     )}

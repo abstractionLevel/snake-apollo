@@ -13,7 +13,7 @@ const Square = (props) => {
     const squareStyle = {
         width:`${props.size}px`,
         height: `${props.size}px`,
-        backgroundColor: 'blue',
+        backgroundColor: props.color,
         position: 'absolute',
         top: `${positionY}px`,
         left: `${positionX}px`,
