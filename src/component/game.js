@@ -64,83 +64,46 @@ const Game = () => {
                     squareIsCollidedWithFood = true;
                     genenerateRandomPositionFood(0, 400);
                 }
-                if (keyDown) {
-                    if (square.playable && !squareIsCollidedWithFood) {
-                        lastPositionPlayble.x = square.x;
-                        lastPositionPlayble.y = square.y;
-                        square.y = square.y + squareSize
-                        setSquareList(squareListCpy);
-                    }  else if (squareIsCollidedWithFood) {
-                        const playbleSquare = squareListCpy.filter(val => val.playable);
-                        const newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y + squareSize, playable: true, color: playbleSquare[0].color };
-                        const newSquareList = squareListCpy.map(item => ({
-                            ...item,
-                            playable: false,
-                            color: "blue"
-                        }));
-                        setSquareList([newSquare, ...newSquareList]);
+                if (square.playable && !squareIsCollidedWithFood) {
+                    lastPositionPlayble.x = square.x;
+                    lastPositionPlayble.y = square.y;
+                    if (keyDown) {
+                        square.y = square.y + squareSize;
+                    } else if (keyLeft) {
+                        square.x = square.x - squareSize;
+                    } else if (keyUp) {
+                        square.y = square.y - squareSize;
+                    } else if (keyRight) {
+                        square.x = square.x + squareSize;
                     }
-                } else if (keyLeft) {
-                    if (square.playable && !squareIsCollidedWithFood) {
-                        lastPositionPlayble.x = square.x;
-                        lastPositionPlayble.y = square.y;
-                        square.x = square.x - squareSize
-                        setSquareList(squareListCpy);
-
-                    } else if (squareIsCollidedWithFood) {
-                        const playbleSquare = squareListCpy.filter(val => val.playable);
-                        const newSquare = { x: playbleSquare[0].x - squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
-                        const newSquareList = squareListCpy.map(item => ({
-                            ...item,
-                            playable: false,
-                            color: "blue"
-                        }));
-                        setSquareList([newSquare, ...newSquareList]);
-                    }
-                } else if (keyUp) {
-                    if (square.playable && !squareIsCollidedWithFood) {
-                        lastPositionPlayble.y = square.y;
-                        lastPositionPlayble.x = square.x;
-                        square.y = square.y - squareSize
-                        setSquareList(squareListCpy);
-                    } else if (squareIsCollidedWithFood) {
-                        const playbleSquare = squareListCpy.filter(val => val.playable);
-                        const newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y - squareSize, playable: true, color: playbleSquare[0].color };
-                        const newSquareList = squareListCpy.map(item => ({
-                            ...item,
-                            playable: false,
-                            color: "blue"
-                        }));
-                        setSquareList([newSquare, ...newSquareList]);
-                    }
-                } else if (keyRight) {
-                    if (square.playable && !squareIsCollidedWithFood) {
-                        lastPositionPlayble.x = square.x;
-                        lastPositionPlayble.y = square.y;
-                        square.x = square.x + squareSize
-                        setSquareList(squareListCpy);
-
-                    } else if (squareIsCollidedWithFood) {
-                        const playbleSquare = squareListCpy.filter(val => val.playable);
-                        const newSquare = { x: playbleSquare[0].x + squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
-                        const newSquareList = squareListCpy.map(item => ({
-                            ...item,
-                            playable: false,
-                            color: "blue"
-                        }));
-                        setSquareList([newSquare, ...newSquareList]);
-                    }
-                }
-                if (!square.playable && !squareIsCollidedWithFood) {
+                    setSquareList(squareListCpy);
+                } else if (!square.playable && !squareIsCollidedWithFood) {
                     let posX = square.x;
                     let posY = square.y;
                     square.x = lastPositionPlayble.x;
                     square.y = lastPositionPlayble.y;
                     lastPositionPlayble.x = posX;
                     lastPositionPlayble.y = posY;
+                } else if (squareIsCollidedWithFood) {
+                    let newSquare = {}
+                    const playbleSquare = squareListCpy.filter(val => val.playable);
+                    const newSquareList = squareListCpy.map(item => ({
+                        ...item,
+                        playable: false,
+                        color: "blue"
+                    }));
+                    if (keyDown) {
+                        newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y + squareSize, playable: true, color: playbleSquare[0].color };
+                    } else if (keyLeft) {
+                        newSquare = { x: playbleSquare[0].x - squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
+                    } else if (keyUp) {
+                        newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y - squareSize, playable: true, color: playbleSquare[0].color };
+                    } else if (keyRight) {
+                        newSquare = { x: playbleSquare[0].x + squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
+                    }
+                    setSquareList([newSquare, ...newSquareList]);
                 }
             }
-
         }, 500);
 
         window.addEventListener('keydown', handleKeyDown);
