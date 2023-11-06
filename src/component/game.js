@@ -58,6 +58,22 @@ const Game = () => {
         setKeyLeft(false);
     }
 
+    const moveSquare = (square) => {
+        if (keyUp) square.y -= squareSize;
+        if (keyDown) square.y += squareSize;
+        if (keyLeft) square.x -= squareSize;
+        if (keyRight) square.x += squareSize;
+        return square;
+    }
+
+    const setSquaresPlaybleFalse = (squareList) => {
+        return  squareList.map(item => ({
+            ...item,
+            playable: false,
+            color: "blue"
+        }));
+    }
+
     useEffect(() => {
         if (stopMove) {
             return () => clearInterval(intervalId && intervalId);
@@ -68,55 +84,33 @@ const Game = () => {
             let lastPositionPlayble = {};
             for (let i = 0; i < squareListCpy.length; i++) {
                 const square = squareListCpy[i];
-                const playbleSquare = squareListCpy.filter(val => val.playable);
                 if (square.x + squareSize > positionFoodX && square.x < positionFoodX + foodSize && square.y < positionFoodY + foodSize && square.y + squareSize > positionFoodY) {
                     squareIsCollidedWithFood = true;
                     genenerateRandomPositionFood(0, 400);
                 }
                 if (square.playable && !squareIsCollidedWithFood) {
                     const isLost = square.x < 0 || square.x + squareSize > 500 || square.y < 0 || square.y + squareSize > 700;
-                    if(isLost) {
+                    if (isLost) {
                         gameOver();
                     } else {
                         lastPositionPlayble.x = square.x;
                         lastPositionPlayble.y = square.y;
-                        if (keyDown) {
-                            square.y = square.y + squareSize;
-                        } else if (keyLeft) {
-                            square.x = square.x - squareSize;
-                        } else if (keyUp) {
-                            square.y = square.y - squareSize;
-                        } else if (keyRight) {
-                            square.x = square.x + squareSize;
-                        }
+                        moveSquare(square);
                         setSquareList(squareListCpy);
                     }
-                    
-
                 } else if (!square.playable && !squareIsCollidedWithFood) {
-                    let posX = square.x;
-                    let posY = square.y;
+                    let tempX  = square.x;
+                    let tempy = square.y;
                     square.x = lastPositionPlayble.x;
                     square.y = lastPositionPlayble.y;
-                    lastPositionPlayble.x = posX;
-                    lastPositionPlayble.y = posY;
+                    lastPositionPlayble.x = tempX;
+                    lastPositionPlayble.y = tempy;
                 } else if (squareIsCollidedWithFood) {
                     let newSquare = {}
-                    const playbleSquare = squareListCpy.filter(val => val.playable);
-                    const newSquareList = squareListCpy.map(item => ({
-                        ...item,
-                        playable: false,
-                        color: "blue"
-                    }));
-                    if (keyDown) {
-                        newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y + squareSize, playable: true, color: playbleSquare[0].color };
-                    } else if (keyLeft) {
-                        newSquare = { x: playbleSquare[0].x - squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
-                    } else if (keyUp) {
-                        newSquare = { x: playbleSquare[0].x, y: playbleSquare[0].y - squareSize, playable: true, color: playbleSquare[0].color };
-                    } else if (keyRight) {
-                        newSquare = { x: playbleSquare[0].x + squareSize, y: playbleSquare[0].y, playable: true, color: playbleSquare[0].color };
-                    }
+                    const playbleSquare = squareListCpy.find(val => val.playable);
+                    const newSquareList = setSquaresPlaybleFalse(squareListCpy);
+                    newSquare = { x: playbleSquare.x, y: playbleSquare.y , playable: true, color: playbleSquare.color };
+                    moveSquare(newSquare)
                     setSquareList([newSquare, ...newSquareList]);
                 }
             }
