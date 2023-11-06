@@ -50,6 +50,14 @@ const Game = () => {
         setPositionFoodY(y);
     }
 
+    const gameOver = () => {
+        setSquareList([{ x: 20, y: 20, playable: true, color: "red" }]);
+        setKeyUp(false);
+        setKeyDown(false);
+        setKeyRight(false);
+        setKeyLeft(false);
+    }
+
     useEffect(() => {
         if (stopMove) {
             return () => clearInterval(intervalId && intervalId);
@@ -60,23 +68,31 @@ const Game = () => {
             let lastPositionPlayble = {};
             for (let i = 0; i < squareListCpy.length; i++) {
                 const square = squareListCpy[i];
+                const playbleSquare = squareListCpy.filter(val => val.playable);
                 if (square.x + squareSize > positionFoodX && square.x < positionFoodX + foodSize && square.y < positionFoodY + foodSize && square.y + squareSize > positionFoodY) {
                     squareIsCollidedWithFood = true;
                     genenerateRandomPositionFood(0, 400);
                 }
                 if (square.playable && !squareIsCollidedWithFood) {
-                    lastPositionPlayble.x = square.x;
-                    lastPositionPlayble.y = square.y;
-                    if (keyDown) {
-                        square.y = square.y + squareSize;
-                    } else if (keyLeft) {
-                        square.x = square.x - squareSize;
-                    } else if (keyUp) {
-                        square.y = square.y - squareSize;
-                    } else if (keyRight) {
-                        square.x = square.x + squareSize;
+                    const isLost = square.x < 0 || square.x + squareSize > 500 || square.y < 0 || square.y + squareSize > 700;
+                    if(isLost) {
+                        gameOver();
+                    } else {
+                        lastPositionPlayble.x = square.x;
+                        lastPositionPlayble.y = square.y;
+                        if (keyDown) {
+                            square.y = square.y + squareSize;
+                        } else if (keyLeft) {
+                            square.x = square.x - squareSize;
+                        } else if (keyUp) {
+                            square.y = square.y - squareSize;
+                        } else if (keyRight) {
+                            square.x = square.x + squareSize;
+                        }
+                        setSquareList(squareListCpy);
                     }
-                    setSquareList(squareListCpy);
+                    
+
                 } else if (!square.playable && !squareIsCollidedWithFood) {
                     let posX = square.x;
                     let posY = square.y;
