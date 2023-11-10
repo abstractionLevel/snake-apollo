@@ -123,8 +123,23 @@ const Game = () => {
 		};
 	}
 
+	const checkPlayableSquareCillionWidthSquare = (square,squareListCpy) => {
+		if (squareListCpy.length > 1) {
+			for (let y = 0; y < squareListCpy.length; y++) {
+				let squareNotPlayble = squareListCpy[y];
+				if (!squareNotPlayble.playable) {
+					if (square.x + squareSize > squareNotPlayble.x && square.x < squareNotPlayble.x + squareSize &&
+						square.y < squareNotPlayble.y + squareSize && square.y + squareSize > squareNotPlayble.y) {
+						gameOver();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
 	useEffect(() => {
-	
 		let intervalId = setInterval(() => {
 			const squareListCpy = [...squareList];
 			let lastPositionPlayble = {};
@@ -137,13 +152,14 @@ const Game = () => {
 					} else {
 						updateLastPosition(lastPositionPlayble, square.x, square.y);
 						moveSquare(square);
+						if(checkPlayableSquareCillionWidthSquare(square,squareListCpy)) return;
 						setSquareList(squareListCpy);
 					}
 				} else if (!square.playable && !checkCollisionWithFood(square)) {
 					updateNotPlaybleSquarePosition(lastPositionPlayble, square)
 				} else if (checkCollisionWithFood(square)) {
 					const newSquareList = setSquaresPlaybleFalse(squareListCpy);
-			        const newSquare = addNewSquare(squareListCpy)
+					const newSquare = addNewSquare(squareListCpy)
 					moveSquare(newSquare);
 					setSquareList([newSquare, ...newSquareList]);
 				}
@@ -156,7 +172,8 @@ const Game = () => {
 			clearInterval(intervalId);
 			window.removeEventListener("keydown", handleKeyDown);
 		};
-	}, [keyLeft, keyDown, keyRight, keyUp, , squareList, stopMove]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [keyLeft, keyDown, keyRight, keyUp, squareList]);
 
 	useEffect(() => {
 		genenerateRandomPositionFood(0, 400);
