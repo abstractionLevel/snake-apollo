@@ -3,21 +3,25 @@ import "./game.css";
 import Square from "./square";
 import Food from "./food";
 
+const LEFT = 0;
+const RIGHT =  500;
+const TOP = 0;
+const BOTTOM = 700;
+const SQUARE_SIZE = 24;
+const FOOD_SIZE = 12;
+
 const Game = () => {
-	const [positionSquareX, setPositionSquareX] = useState(10);
-	const [positionSquareY, setPositionSquareY] = useState(0);
+
 	const [positionFoodX, setPositionFoodX] = useState(100);
 	const [positionFoodY, setPositionFoodY] = useState(0);
 	const [keyUp, setKeyUp] = useState(false);
 	const [keyDown, setKeyDown] = useState(false);
 	const [keyLeft, setKeyLeft] = useState(false);
 	const [keyRight, setKeyRight] = useState(false);
-	const [stopMove, setStopMove] = useState(false);
-	const [squareSize, setSquareSize] = useState(24);
-	const [foodSize, setFoodSize] = useState(12);
 	const [countFood, setCountFood] = useState(0);
+
 	const [squareList, setSquareList] = useState([
-		{ x: 20, y: 20, playable: true, color: "red" },
+		{ x: LEFT, y: 20, playable: true, color: "red" },
 	]);
 
 	const handleKeyDown = (event) => {
@@ -43,7 +47,8 @@ const Game = () => {
 	const genenerateRandomPositionFood = (min, max) => {
 		let x = getRandomNumber(min, max);
 		let y = getRandomNumber(min, max);
-		while (x === positionSquareX && y === positionSquareY) {
+		const playable = squareList.find(square=>square.playable);
+		while (x === playable.x && y === playable.y) {
 			x = getRandomNumber(min, max);
 			y = getRandomNumber(min, max);
 		}
@@ -57,14 +62,13 @@ const Game = () => {
 		setKeyDown(false);
 		setKeyRight(false);
 		setKeyLeft(false);
-		setStopMove(true);
 	};
 
 	const moveSquare = (square) => {
-		if (keyUp) square.y -= squareSize;
-		if (keyDown) square.y += squareSize;
-		if (keyLeft) square.x -= squareSize;
-		if (keyRight) square.x += squareSize;
+		if (keyUp) square.y -= SQUARE_SIZE;
+		if (keyDown) square.y += SQUARE_SIZE;
+		if (keyLeft) square.x -= SQUARE_SIZE;
+		if (keyRight) square.x += SQUARE_SIZE;
 		return square;
 	};
 
@@ -77,20 +81,21 @@ const Game = () => {
 	};
 
 	const checkBoundaries = (square) => {
+		console.log(square.x)
 		return (
-			square.x < 0 ||
-			square.x + squareSize > 500 ||
-			square.y < 0 ||
-			square.y + squareSize > 700
+			square.x < TOP ||
+			square.x + SQUARE_SIZE > RIGHT ||
+			square.y < LEFT ||
+			square.y + SQUARE_SIZE > BOTTOM
 		);
 	};
 
 	const checkCollisionWithFood = (square) => {
 		if (
-			square.x + squareSize > positionFoodX &&
-			square.x < positionFoodX + foodSize &&
-			square.y < positionFoodY + foodSize &&
-			square.y + squareSize > positionFoodY
+			square.x + SQUARE_SIZE > positionFoodX &&
+			square.x < positionFoodX + FOOD_SIZE &&
+			square.y < positionFoodY + FOOD_SIZE &&
+			square.y + SQUARE_SIZE > positionFoodY
 		) {
 			genenerateRandomPositionFood(0, 400);
 			return true;
@@ -128,8 +133,8 @@ const Game = () => {
 			for (let y = 0; y < squareListCpy.length; y++) {
 				let squareNotPlayble = squareListCpy[y];
 				if (!squareNotPlayble.playable) {
-					if (square.x + squareSize > squareNotPlayble.x && square.x < squareNotPlayble.x + squareSize &&
-						square.y < squareNotPlayble.y + squareSize && square.y + squareSize > squareNotPlayble.y) {
+					if (square.x + SQUARE_SIZE > squareNotPlayble.x && square.x < squareNotPlayble.x + SQUARE_SIZE &&
+						square.y < squareNotPlayble.y + SQUARE_SIZE && square.y + SQUARE_SIZE > squareNotPlayble.y) {
 						gameOver();
 						return true;
 					}
@@ -185,7 +190,7 @@ const Game = () => {
 				<Food
 					positionX={positionFoodX}
 					positionY={positionFoodY}
-					size={foodSize}
+					size={FOOD_SIZE}
 				/>
 				{squareList &&
 					squareList.length > 0 &&
@@ -193,7 +198,7 @@ const Game = () => {
 						<Square
 							positionX={val.x}
 							positionY={val.y}
-							size={squareSize}
+							size={SQUARE_SIZE}
 							color={val.color}
 						/>
 					))}
