@@ -9,7 +9,7 @@ function App() {
 			<Row>
 				<Col>
 					<div>
-						{/* <Info /> */}
+						<Info />
 					</div>
 				</Col>
 				<Col>

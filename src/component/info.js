@@ -4,7 +4,7 @@ const Info = () => {
 
     return (
         <div className="container-info">
-            Info
+            
         </div>
     )
 }

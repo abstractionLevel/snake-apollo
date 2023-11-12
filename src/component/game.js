@@ -19,6 +19,7 @@ const Game = () => {
 	const [keyLeft, setKeyLeft] = useState(false);
 	const [keyRight, setKeyRight] = useState(false);
 	const [countFood, setCountFood] = useState(0);
+	
 
 	const [squareList, setSquareList] = useState([
 		{ x: LEFT, y: 20, playable: true, color: "red" },
@@ -97,7 +98,7 @@ const Game = () => {
 			square.y < positionFoodY + FOOD_SIZE &&
 			square.y + SQUARE_SIZE > positionFoodY
 		) {
-			genenerateRandomPositionFood(0, 400);
+			genenerateRandomPositionFood(0, 700);
 			return true;
 		}
 		return false;
