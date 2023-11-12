@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
+import { updateFood, updatePosition } from "./redux/actions";
 import "./game.css";
 import Square from "./square";
 import Food from "./food";
 
 const LEFT = 0;
-const RIGHT =  500;
+const RIGHT = 500;
 const TOP = 0;
 const BOTTOM = 700;
 const SQUARE_SIZE = 24;
@@ -12,14 +14,15 @@ const FOOD_SIZE = 12;
 
 const Game = () => {
 
+	const dispatch = useDispatch();
 	const [positionFoodX, setPositionFoodX] = useState(100);
 	const [positionFoodY, setPositionFoodY] = useState(0);
 	const [keyUp, setKeyUp] = useState(false);
 	const [keyDown, setKeyDown] = useState(false);
 	const [keyLeft, setKeyLeft] = useState(false);
 	const [keyRight, setKeyRight] = useState(false);
-	const [countFood, setCountFood] = useState(0);
-	
+	const [foodEaten, setFoodEaten] = useState(0);
+
 
 	const [squareList, setSquareList] = useState([
 		{ x: LEFT, y: 20, playable: true, color: "red" },
@@ -48,7 +51,7 @@ const Game = () => {
 	const genenerateRandomPositionFood = (min, max) => {
 		let x = getRandomNumber(min, max);
 		let y = getRandomNumber(min, max);
-		const playable = squareList.find(square=>square.playable);
+		const playable = squareList.find(square => square.playable);
 		while (x === playable.x && y === playable.y) {
 			x = getRandomNumber(min, max);
 			y = getRandomNumber(min, max);
@@ -56,13 +59,14 @@ const Game = () => {
 		setPositionFoodX(x);
 		setPositionFoodY(y);
 	};
-
+// TODO: IL FOOD VA FUORI DALLO SCHERMO SE SI RESITGRE LA FINESTRA
 	const gameOver = () => {
 		setSquareList([{ x: 20, y: 20, playable: true, color: "red" }]);
 		setKeyUp(false);
 		setKeyDown(false);
 		setKeyRight(false);
 		setKeyLeft(false);
+		dispatch(updateFood(0));
 	};
 
 	const moveSquare = (square) => {
@@ -82,7 +86,6 @@ const Game = () => {
 	};
 
 	const checkBoundaries = (square) => {
-		console.log(square.x)
 		return (
 			square.x < TOP ||
 			square.x + SQUARE_SIZE > RIGHT ||
@@ -129,7 +132,7 @@ const Game = () => {
 		};
 	}
 
-	const checkPlayableSquareCillionWidthSquare = (square,squareListCpy) => {
+	const checkPlayableSquareCillionWidthSquare = (square, squareListCpy) => {
 		if (squareListCpy.length > 1) {
 			for (let y = 0; y < squareListCpy.length; y++) {
 				let squareNotPlayble = squareListCpy[y];
@@ -145,6 +148,15 @@ const Game = () => {
 		return false;
 	}
 
+
+	const incrementFood = () => {
+		setFoodEaten(prevFood => {
+			const newFood = prevFood + 1;
+			dispatch(updateFood(newFood)); 
+			return newFood;
+		});
+	};
+
 	useEffect(() => {
 		let intervalId = setInterval(() => {
 			const squareListCpy = [...squareList];
@@ -158,7 +170,7 @@ const Game = () => {
 					} else {
 						updateLastPosition(lastPositionPlayble, square.x, square.y);
 						moveSquare(square);
-						if(checkPlayableSquareCillionWidthSquare(square,squareListCpy)) return;
+						if (checkPlayableSquareCillionWidthSquare(square, squareListCpy)) return;
 						setSquareList(squareListCpy);
 					}
 				} else if (!square.playable && !checkCollisionWithFood(square)) {
@@ -168,6 +180,7 @@ const Game = () => {
 					const newSquare = addNewSquare(squareListCpy)
 					moveSquare(newSquare);
 					setSquareList([newSquare, ...newSquareList]);
+					incrementFood();
 				}
 			}
 		}, 500);
@@ -184,6 +197,10 @@ const Game = () => {
 	useEffect(() => {
 		genenerateRandomPositionFood(0, 400);
 	}, []);
+
+	useEffect(() => {
+
+	})
 
 	return (
 		<>
@@ -203,9 +220,6 @@ const Game = () => {
 							color={val.color}
 						/>
 					))}
-			</div>
-			<div>
-				<p>food: {countFood}</p>
 			</div>
 		</>
 	);

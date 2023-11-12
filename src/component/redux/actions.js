@@ -5,5 +5,5 @@ export const updatePosition = position => ({
 
 export const updateFood = food => ({
     type: 'UPDATE_FOOD',
-    payload: food``
+    payload: food
 }) 
