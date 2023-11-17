@@ -6,18 +6,9 @@ import Info from './component/info';
 function App() {
 	return (
 		<Container >
-			<Row>
-				<Col>
-					<div>
-						<Info />
-					</div>
-				</Col>
-				<Col>
-					<div>
-						<Game />
-					</div>
-				</Col>
-			</Row>
+			<Game />
+			<br/>
+			<Info />
 		</Container>
 	);
 }

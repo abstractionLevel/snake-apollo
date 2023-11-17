@@ -5,12 +5,10 @@ import "./game.css";
 import Square from "./square";
 import Food from "./food";
 
-const LEFT = 0;
-const RIGHT = 500;
-const TOP = 0;
-const BOTTOM = 700;
 const SQUARE_SIZE = 24;
 const FOOD_SIZE = 12;
+const screenWidth = 700;
+const screenHeigth = 600;
 
 const Game = () => {
 
@@ -20,12 +18,12 @@ const Game = () => {
 	const [keyUp, setKeyUp] = useState(false);
 	const [keyDown, setKeyDown] = useState(false);
 	const [keyLeft, setKeyLeft] = useState(false);
-	const [keyRight, setKeyRight] = useState(false);
+	const [keyRight, setKeyRight] = useState(true);
 	const [foodEaten, setFoodEaten] = useState(0);
 
 
 	const [squareList, setSquareList] = useState([
-		{ x: LEFT, y: 20, playable: true, color: "red" },
+		{ x: 0, y: 20, playable: true, color: "red" },
 	]);
 
 	const handleKeyDown = (event) => {
@@ -89,10 +87,10 @@ const Game = () => {
 
 	const checkBoundaries = (square) => {
 		return (
-			square.x < TOP ||
-			square.x + SQUARE_SIZE > RIGHT ||
-			square.y < LEFT ||
-			square.y + SQUARE_SIZE > BOTTOM
+			square.x < 0 ||
+			square.x + SQUARE_SIZE >= screenWidth ||
+			square.y < 0 ||
+			square.y + SQUARE_SIZE > screenWidth
 		);
 	};
 
@@ -205,7 +203,7 @@ const Game = () => {
 
 	return (
 		<>
-			<div tabIndex={0} className="container-game">
+			<div tabIndex={0} className="container-game" style={{width:screenWidth,height:screenHeigth}}>
 				<Food
 					positionX={positionFoodX}
 					positionY={positionFoodY}

@@ -1,3 +1,9 @@
 .container-info {
-    width: 300px;
+    width: 500px;
+    background-color: black;
+    border-radius: 8px;
+}
+span {
+    padding: 10px;
+    color:chartreuse;
 }

@@ -8,9 +8,9 @@ const Info = () => {
 
     return (
         <div className="container-info">
-            FOOD: {food}
+           <span >FOOD: {food}</span> 
             <div></div>
-            POSITION: x: {position.x}  y: {position.y}
+            <span>POSITION: x: {position.x}  y: {position.y}</span>
         </div>
     )
 }
