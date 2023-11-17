@@ -1,70 +1,30 @@
-# Getting Started with Create React App
+# Snake Game in React JS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Benvenuto nel Snake Game in React JS! Questo progetto è un classico gioco Snake implementato utilizzando il framework JavaScript React.
 
-## Available Scripts
+## Caratteristiche principali
 
-In the project directory, you can run:
+- **Interfaccia utente intuitiva:** Un'interfaccia utente semplice e intuitiva che ti permette di iniziare a giocare senza alcuna complicazione.
+- **Design flessibile:** Il gioco è stato progettato con un layout flessibile e reattivo, rendendolo adatto a diverse dimensioni di schermi e dispositivi.
+- **Funzionalità Snake classica:** Sperimenta l'emozione della Snake classica con controlli facili da imparare e sfide sempre crescenti.
+- **Implementato in React JS:** La potenza di React JS rende il gioco efficiente, facilmente estendibile e manutenibile.
 
-### `npm start`
+## Come giocare
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Clona il repository.
+2. Esegui `npm install` per installare le dipendenze.
+3. Esegui `npm start` per avviare il gioco nel tuo browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Divertiti a giocare e sentiti libero di contribuire migliorando il gioco o segnalando eventuali problemi!
 
-### `npm test`
+## Screenshot
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Snake Game Screenshot](/screenshot.png)
 
-### `npm run build`
+## Contributi
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Se desideri contribuire, leggi [CONTRIBUTING.md](CONTRIBUTING.md) per le linee guida.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Licenza
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Questo progetto è concesso in licenza con la licenza [MIT](LICENSE).
