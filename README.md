@@ -17,13 +17,6 @@ Benvenuto nel Snake Game in React JS! Questo progetto è un classico gioco Snake
 
 Divertiti a giocare e sentiti libero di contribuire migliorando il gioco o segnalando eventuali problemi!
 
-## Screenshot
-
-![Snake Game Screenshot](/screenshot.png)
-
-## Contributi
-
-Se desideri contribuire, leggi [CONTRIBUTING.md](CONTRIBUTING.md) per le linee guida.
 
 ## Licenza
 
