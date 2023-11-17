@@ -74,6 +74,8 @@ const Game = () => {
 		if (keyDown) square.y += SQUARE_SIZE;
 		if (keyLeft) square.x -= SQUARE_SIZE;
 		if (keyRight) square.x += SQUARE_SIZE;
+		const position = {x:square.x,y:square.y}
+		dispatch(updatePosition(position));
 		return square;
 	};
 
@@ -147,7 +149,6 @@ const Game = () => {
 		}
 		return false;
 	}
-
 
 	const incrementFood = () => {
 		setFoodEaten(prevFood => {

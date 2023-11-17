@@ -10,7 +10,7 @@ const Info = () => {
         <div className="container-info">
             FOOD: {food}
             <div></div>
-            POSITION: {position}
+            POSITION: x: {position.x}  y: {position.y}
         </div>
     )
 }

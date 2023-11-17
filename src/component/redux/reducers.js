@@ -8,7 +8,7 @@ const dataReducers = (state = initiaState, action) => {
         case 'UPDATE_POSITION':
             return { ...state, position: action.payload };
         case 'UPDATE_FOOD':
-            return { ...state, position: action.payload }
+            return { ...state, food: action.payload }
         default:
             return state;
     }
